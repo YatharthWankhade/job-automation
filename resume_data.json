@@ -1,0 +1,127 @@
+{
+  "personal_info": {
+    "name": "Your Name",
+    "email": "your.email@gmail.com",
+    "phone": "(123) 456-7890",
+    "location": "City, State",
+    "linkedin": "linkedin.com/in/yourprofile",
+    "github": "github.com/yourusername",
+    "portfolio": "yourportfolio.com"
+  },
+  "summary": "Experienced software engineer with expertise in full-stack development, specializing in Python, JavaScript, and cloud technologies. Passionate about building scalable applications and solving complex problems.",
+  "skills": {
+    "programming_languages": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "Java",
+      "SQL"
+    ],
+    "frameworks": [
+      "React",
+      "Angular",
+      "Node.js",
+      "Express",
+      "Django",
+      "Flask",
+      "Spring Boot"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MongoDB",
+      "MySQL",
+      "Redis"
+    ],
+    "cloud_platforms": [
+      "AWS",
+      "Google Cloud",
+      "Azure"
+    ],
+    "tools": [
+      "Git",
+      "Docker",
+      "Kubernetes",
+      "Jenkins",
+      "CI/CD"
+    ],
+    "soft_skills": [
+      "Problem Solving",
+      "Team Collaboration",
+      "Communication",
+      "Agile/Scrum"
+    ]
+  },
+  "experience": [
+    {
+      "company": "Company Name",
+      "position": "Software Engineer",
+      "location": "City, State",
+      "start_date": "2022-01",
+      "end_date": "Present",
+      "current": true,
+      "achievements": [
+        "Developed and deployed scalable web applications serving 100K+ users",
+        "Improved application performance by 40% through optimization",
+        "Led a team of 3 developers on critical projects",
+        "Implemented CI/CD pipelines reducing deployment time by 60%"
+      ],
+      "technologies": ["Python", "React", "AWS", "PostgreSQL"]
+    },
+    {
+      "company": "Previous Company",
+      "position": "Junior Developer",
+      "location": "City, State",
+      "start_date": "2020-06",
+      "end_date": "2021-12",
+      "current": false,
+      "achievements": [
+        "Built RESTful APIs handling 10K+ requests per day",
+        "Collaborated with cross-functional teams on product features",
+        "Wrote comprehensive unit tests achieving 85% code coverage"
+      ],
+      "technologies": ["JavaScript", "Node.js", "MongoDB"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University Name",
+      "degree": "Bachelor of Science",
+      "field": "Computer Science",
+      "location": "City, State",
+      "graduation_date": "2020-05",
+      "gpa": "3.8/4.0"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2023-06"
+    }
+  ],
+  "projects": [
+    {
+      "name": "AI Notepad Assistant",
+      "description": "Built an intelligent notepad application with AI-powered analysis and multi-tab support",
+      "technologies": ["Angular", "TypeScript", "Google Gemini API"],
+      "url": "github.com/yourusername/ai-notepad"
+    }
+  ],
+  "preferences": {
+    "desired_roles": [
+      "Software Engineer",
+      "Full Stack Developer",
+      "Backend Developer",
+      "Python Developer"
+    ],
+    "desired_industries": [
+      "Technology",
+      "FinTech",
+      "Healthcare Tech",
+      "E-commerce"
+    ],
+    "work_authorization": "US Citizen",
+    "willing_to_relocate": false,
+    "remote_preference": "Remote or Hybrid"
+  }
+}

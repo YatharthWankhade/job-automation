@@ -1,0 +1,98 @@
+# Job Application Automation Configuration
+
+# Job Search Criteria
+search:
+  keywords:
+    - "software engineer"
+    - "full stack developer"
+    - "backend developer"
+    - "python developer"
+  locations:
+    - "Remote"
+    - "United States"
+  experience_levels:
+    - "Entry Level"
+    - "Mid Level"
+  job_types:
+    - "Full-time"
+    - "Contract"
+
+# Job Platforms to Scrape
+platforms:
+  enabled:
+    - "linkedin"
+    - "indeed"
+    - "glassdoor"
+    - "dice"
+    - "monster"
+  # Add custom company career pages
+  custom_urls: []
+
+# Matching Configuration
+matching:
+  threshold: 70  # Only apply to jobs with 70%+ match
+  use_ai: true
+  gemini_model: "gemini-2.0-flash-exp"
+
+# Application Mode
+application:
+  mode: "review_queue"  # Options: "auto", "review_queue", "both"
+  auto_apply_threshold: 85  # Auto-apply if match score >= 85% (when mode is "both")
+  generate_custom_cover_letter: true
+  max_applications_per_day: 10
+
+# Follow-up Configuration
+followup:
+  enabled: true
+  schedule:
+    - days: 2  # First follow-up after 2 days
+    - days: 4  # Second follow-up after 4 days (2 days after first)
+    - days: 7  # Third follow-up after 7 days (3 days after second)
+  max_followups_per_application: 3
+
+# Rate Limiting & Safety
+rate_limiting:
+  delay_between_scrapes: 3  # seconds
+  delay_between_applications: 60  # seconds
+  max_retries: 3
+  prevent_duplicates: true  # Never apply to same job twice
+
+# Resume Configuration
+resume:
+  primary_file: "resume.pdf"  # Path to your main resume
+  formats_supported:
+    - "pdf"
+    - "docx"
+    - "txt"
+    - "json"
+  data_file: "resume_data.json"  # Structured resume data
+
+# Email Configuration (for follow-ups)
+email:
+  provider: "gmail"  # Options: "gmail", "smtp"
+  from_name: "Your Name"
+  from_email: "your.email@gmail.com"
+  signature: |
+    Best regards,
+    Your Name
+    Phone: (123) 456-7890
+    LinkedIn: linkedin.com/in/yourprofile
+
+# Database
+database:
+  path: "database.db"
+  backup_enabled: true
+  backup_frequency: "daily"
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/job_automation.log"
+  console: true
+
+# Browser Automation
+browser:
+  headless: false  # Set to true for background operation
+  browser_type: "chromium"  # Options: "chromium", "firefox", "webkit"
+  timeout: 30  # seconds
+  user_data_dir: "browser_data"  # Persist login sessions
