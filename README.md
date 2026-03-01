@@ -1,238 +1,223 @@
-# Job Application Automation System
+<h1 align="center">🤖 Job Application Automation</h1>
 
-An intelligent job application automation system that scrapes job postings, matches them with your resume using AI, applies automatically, and sends follow-up emails.
+<p align="center">
+  <em>Apply smarter, not harder. AI-powered job hunting on autopilot.</em>
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Google%20Gemini-AI%20Powered-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Playwright-Browser%20Automation-2EAD33?style=for-the-badge&logo=playwright&logoColor=white"/>
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
+</p>
 
-- 🔍 **Multi-Platform Job Scraping**: Scrapes jobs from LinkedIn, Indeed, and other platforms
-- 🤖 **AI-Powered Matching**: Uses Google Gemini to match jobs with your resume (70% threshold)
-- 📝 **Auto-Generated Cover Letters**: Creates personalized cover letters for each application
-- ✅ **Dual Application Modes**: 
-  - Auto-apply for 85%+ matches
-  - Review queue for 70-84% matches
-- 📧 **Automated Follow-ups**: Sends follow-up emails every 2 days
-- 🚫 **Duplicate Prevention**: Never applies to the same job twice
-- 📊 **Progress Tracking**: SQLite database tracks all jobs, applications, and follow-ups
+---
 
-## Prerequisites
+## What It Does
+
+This system automates your entire job search workflow — from finding relevant openings to sending follow-up emails — so you can focus on preparing for interviews instead of scrolling job boards.
+
+```
+Scrape Jobs → Match with Resume (AI) → Generate Cover Letter → Apply → Follow-up
+```
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| 🔍 **Multi-Platform Scraping** | LinkedIn, Indeed, and more — all in one run |
+| � **AI Resume Matching** | Google Gemini scores each job 0–100% against your resume |
+| 📝 **Auto Cover Letters** | Personalized letters generated per job, per company |
+| ✅ **Dual Application Modes** | Auto-apply (85%+) or review queue (70–84%) |
+| 📧 **Smart Follow-ups** | Scheduled follow-up emails every 2 days |
+| 🚫 **Zero Duplicates** | Never applies to the same job twice |
+| 🧪 **Dry-Run Mode** | Test the full pipeline without sending anything |
+| 📊 **Tracking Dashboard** | SQLite DB records every job, application, and follow-up |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone & Setup
+
+```bash
+git clone https://github.com/YOUR_USERNAME/job-automation.git
+cd job-automation
+./setup.sh   # Creates venv, installs deps, installs Playwright
+```
+
+### 2. Configure Environment
+
+```bash
+cp .env.example .env
+# Edit .env and add your keys:
+#   GEMINI_API_KEY=your_key_here
+#   GMAIL_APP_PASSWORD=your_app_password  (optional, for follow-ups)
+```
+
+### 3. Add Your Resume
+
+Edit `resume_data.json` with your actual info — skills, experience, education, and job preferences. This is what the AI uses to match and score jobs.
+
+### 4. Customize Search
+
+Edit `config.yaml` to set your target roles, locations, and platforms:
+
+```yaml
+search:
+  keywords: ["software engineer", "backend developer"]
+  locations: ["Remote", "New York"]
+
+matching:
+  threshold: 70  # Only consider jobs with 70%+ match
+
+application:
+  mode: "both"   # auto for 85%+, review queue for 70-84%
+```
+
+### 5. Run It
+
+```bash
+# Safe first run — dry mode, no actual applications
+python main.py run-all --limit 5 --dry-run
+
+# When ready, go live
+python main.py run-all --limit 20
+```
+
+---
+
+## 🛠 CLI Reference
+
+```bash
+python main.py scrape      # Scrape new job listings
+python main.py match       # AI-match scraped jobs with your resume
+python main.py review      # View jobs in your review queue
+python main.py apply       # Submit applications
+python main.py followup    # Send scheduled follow-up emails
+python main.py stats       # View overall statistics
+
+# Common flags
+  --limit N       Max items to process
+  --dry-run       Preview without submitting/sending
+  --mode auto     Force auto-apply mode
+```
+
+---
+
+## 🗂 Project Structure
+
+```
+job-automation/
+├── main.py                   # CLI entrypoint & orchestrator
+├── config.yaml               # All configuration in one place
+├── resume_data.json          # Your structured resume data
+├── setup.sh                  # One-command setup script
+│
+├── scrapers/
+│   ├── base_scraper.py       # Shared scraping utilities
+│   ├── linkedin_scraper.py   # LinkedIn (Playwright-based)
+│   └── indeed_scraper.py     # Indeed (BeautifulSoup-based)
+│
+├── matcher/
+│   ├── resume_parser.py      # Parses PDF / DOCX / TXT / JSON
+│   └── job_matcher.py        # AI scoring & routing logic
+│
+├── applicator/
+│   └── base_applicator.py    # Application submission engine
+│
+├── followup/
+│   ├── email_manager.py      # Gmail / SMTP integration
+│   └── scheduler.py          # Follow-up timing & dispatch
+│
+└── utils/
+    ├── database.py            # SQLite schema & queries
+    ├── ai_helper.py           # Gemini API wrapper
+    └── logger.py              # Coloured console + file logging
+```
+
+---
+
+## 🧠 How the AI Matching Works
+
+Each scraped job is sent to **Google Gemini** along with your resume data. Gemini returns:
+
+- **Match score** (0–100%)
+- **Rationale** for the score
+- **Missing skills** — so you know what to highlight
+
+Jobs are then routed:
+
+```
+≥ 85%  →  Auto-apply queue
+70–84% →  Review queue (your approval needed)
+< 70%  →  Skipped
+```
+
+---
+
+## 🔒 Safety First
+
+Before going live, always:
+
+```bash
+# 1. Run dry-run to preview everything
+python main.py run-all --limit 3 --dry-run
+
+# 2. Check match quality
+python main.py review
+
+# 3. Inspect generated cover letters in the logs
+tail -f logs/job_automation.log
+
+# 4. Start small on first real run
+python main.py apply --limit 1
+```
+
+---
+
+## 🔧 Extending the System
+
+### Add a New Job Platform
+
+```python
+# scrapers/glassdoor_scraper.py
+from scrapers.base_scraper import BaseScraper
+
+class GlassdoorScraper(BaseScraper):
+    def get_platform_name(self): return "glassdoor"
+    def search_jobs(self, keywords, locations, **kwargs): ...
+    def get_job_details(self, url): ...
+```
+
+Then add `"glassdoor"` to `platforms.enabled` in `config.yaml`.
+
+---
+
+## 📋 Prerequisites
 
 - Python 3.8+
-- Google Gemini API key
-- (Optional) Gmail account for sending follow-ups
+- A [Google Gemini API key](https://aistudio.google.com/app/apikey) (free tier works)
+- A Gmail App Password *(optional — only needed for follow-up emails)*
 
-## Installation
+---
 
-1. **Clone or navigate to the project directory**:
-   ```bash
-   cd /Users/yatharthwankhade/Developer/job-automation
-   ```
+## ⚠️ Current Limitations
 
-2. **Create a virtual environment**:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Mac/Linux
-   ```
+- Application **submission** runs in demonstration/dry-run mode by default (production browser automation can be enabled)
+- LinkedIn scraping requires a **one-time manual login** — session is saved after that
+- Always respect each platform's Terms of Service
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-4. **Install Playwright browsers** (for LinkedIn scraping):
-   ```bash
-   playwright install chromium
-   ```
+## 📄 License
 
-5. **Set up environment variables**:
-   ```bash
-   export GEMINI_API_KEY="your-gemini-api-key"
-   # Optional: for email follow-ups
-   export GMAIL_APP_PASSWORD="your-gmail-app-password"
-   ```
+MIT — use freely, contribute back if you improve it.
 
-## Configuration
+---
 
-Edit `config.yaml` to customize:
-
-- **Job search criteria**: Keywords, locations, experience levels
-- **Platforms**: Enable/disable LinkedIn, Indeed, etc.
-- **Matching threshold**: Default is 70%
-- **Application mode**: `auto`, `review_queue`, or `both`
-- **Follow-up schedule**: Default is every 2 days
-- **Rate limiting**: Prevent being flagged as a bot
-
-## Resume Setup
-
-1. **Edit `resume_data.json`** with your information:
-   - Personal info (name, email, phone, LinkedIn, GitHub)
-   - Skills (programming languages, frameworks, tools)
-   - Experience (companies, positions, achievements)
-   - Education and certifications
-   - Preferences (desired roles, industries, remote preference)
-
-2. **(Optional) Add your resume file**:
-   - Place your resume PDF/DOCX in the project directory
-   - Update `config.yaml` with the filename
-
-## Usage
-
-### Run Full Pipeline (Recommended for First Time)
-
-```bash
-# Dry run (doesn't actually apply or send emails)
-python main.py run-all --limit 5 --dry-run
-```
-
-### Individual Commands
-
-**1. Scrape Jobs**:
-```bash
-python main.py scrape --limit 50
-```
-
-**2. Match Jobs with Resume**:
-```bash
-python main.py match
-```
-
-**3. Review Matched Jobs**:
-```bash
-python main.py review
-```
-
-**4. Apply to Jobs**:
-```bash
-# Dry run first
-python main.py apply --limit 5 --dry-run
-
-# Actual application (when ready)
-python main.py apply --limit 5
-```
-
-**5. Send Follow-ups**:
-```bash
-# Dry run first
-python main.py followup --dry-run
-
-# Actual sending (when ready)
-python main.py followup
-```
-
-**6. View Statistics**:
-```bash
-python main.py stats
-```
-
-## How It Works
-
-### 1. Job Scraping
-- Searches configured platforms (LinkedIn, Indeed) for jobs matching your criteria
-- Extracts job title, company, location, description, requirements
-- Stores in SQLite database with duplicate detection
-
-### 2. AI Matching
-- Uses Google Gemini to analyze each job description
-- Compares with your resume data
-- Generates match score (0-100%) and rationale
-- Identifies missing skills
-
-### 3. Application Routing
-- **85%+ match**: Auto-apply (if mode is `both` or `auto`)
-- **70-84% match**: Add to review queue
-- **<70% match**: Rejected, not applied
-
-### 4. Cover Letter Generation
-- AI generates personalized cover letter for each job
-- Highlights relevant experience and skills
-- Tailored to company and role
-
-### 5. Application Submission
-- **(Current version)**: Dry-run mode shows what would be submitted
-- **(Production version)**: Would use browser automation to fill forms and submit
-
-### 6. Follow-up Scheduling
-- Automatically schedules follow-ups for applied jobs
-- Default: Day 2, Day 4, Day 7 after application
-- AI-generated personalized follow-up emails
-
-## Database Schema
-
-The system uses SQLite with three main tables:
-
-- **jobs**: All scraped job postings
-- **applications**: Application records with match scores and status
-- **followups**: Scheduled and sent follow-up emails
-
-## Safety Features
-
-- **Dry-run mode**: Test everything before actual submission
-- **Rate limiting**: Delays between requests to avoid detection
-- **Duplicate prevention**: Checks database before applying
-- **Application limits**: Configure max applications per day
-- **Review queue**: Manual approval option for borderline matches
-
-## Troubleshooting
-
-### LinkedIn Login Required
-- The LinkedIn scraper will open a browser window
-- Log in manually when prompted
-- Session will be saved for future runs
-
-### API Rate Limits
-- Gemini API has rate limits - adjust delays in config
-- Use `--limit` flag to process fewer jobs at once
-
-### Missing Dependencies
-```bash
-pip install -r requirements.txt
-playwright install chromium
-```
-
-## Customization
-
-### Add More Job Platforms
-
-1. Create a new scraper in `scrapers/` (e.g., `glassdoor_scraper.py`)
-2. Inherit from `BaseScraper`
-3. Implement `search_jobs()` and `get_job_details()`
-4. Add to `config.yaml` platforms list
-
-### Customize Matching Logic
-
-Edit `matcher/job_matcher.py` to adjust:
-- Matching algorithm
-- Threshold calculations
-- Skill weighting
-
-### Customize Email Templates
-
-Edit `followup/scheduler.py` to modify:
-- Follow-up timing
-- Email generation prompts
-- Signature format
-
-## Important Notes
-
-⚠️ **Current Limitations**:
-- Application submission is in dry-run/demonstration mode
-- Email sending shows preview but doesn't actually send (unless SMTP configured)
-- LinkedIn scraping requires manual login
-
-⚠️ **Before Going Live**:
-1. Test thoroughly with `--dry-run` flag
-2. Review generated cover letters for quality
-3. Start with small `--limit` values
-4. Monitor for any platform blocks or rate limits
-5. Ensure resume data is accurate and complete
-
-## License
-
-This is a personal automation tool. Use responsibly and in accordance with job platform terms of service.
-
-## Support
-
-For issues or questions:
-1. Check the logs in `logs/job_automation.log`
-2. Review the configuration in `config.yaml`
-3. Ensure all environment variables are set
-4. Try with `--dry-run` flag first
+<p align="center">
+  Built with 🤖 Google Gemini · 🎭 Playwright · 🐍 Python
+</p>
