@@ -1,223 +1,158 @@
-<h1 align="center">🤖 Job Application Automation</h1>
+# Job Application Automation
 
-<p align="center">
-  <em>Apply smarter, not harder. AI-powered job hunting on autopilot.</em>
-</p>
+> AI-powered job hunting — from scraping to follow-ups, fully automated.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Google%20Gemini-AI%20Powered-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Playwright-Browser%20Automation-2EAD33?style=for-the-badge&logo=playwright&logoColor=white"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/>
-</p>
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat-square&logo=python&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=flat-square&logo=google&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-Automation-2EAD33?style=flat-square&logo=playwright&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ---
 
-## What It Does
+## Overview
 
-This system automates your entire job search workflow — from finding relevant openings to sending follow-up emails — so you can focus on preparing for interviews instead of scrolling job boards.
+This tool automates the full job application lifecycle:
 
-```
-Scrape Jobs → Match with Resume (AI) → Generate Cover Letter → Apply → Follow-up
-```
+**Scrape → Match → Apply → Follow-up**
 
----
-
-## ✨ Features
-
-| Feature | Description |
-|---|---|
-| 🔍 **Multi-Platform Scraping** | LinkedIn, Indeed, and more — all in one run |
-| � **AI Resume Matching** | Google Gemini scores each job 0–100% against your resume |
-| 📝 **Auto Cover Letters** | Personalized letters generated per job, per company |
-| ✅ **Dual Application Modes** | Auto-apply (85%+) or review queue (70–84%) |
-| 📧 **Smart Follow-ups** | Scheduled follow-up emails every 2 days |
-| 🚫 **Zero Duplicates** | Never applies to the same job twice |
-| 🧪 **Dry-Run Mode** | Test the full pipeline without sending anything |
-| 📊 **Tracking Dashboard** | SQLite DB records every job, application, and follow-up |
+It scrapes job listings, uses Google Gemini to match them against your resume, generates tailored cover letters, submits applications, and schedules follow-up emails — all configurable and safe to test with dry-run mode.
 
 ---
 
-## 🚀 Quick Start
+## Features
 
-### 1. Clone & Setup
+- **Multi-platform scraping** — LinkedIn, Indeed, and extensible to others
+- **AI resume matching** — Gemini scores each job (0–100%) and explains why
+- **Dual application routing** — auto-apply at 85%+, review queue at 70–84%
+- **Personalized cover letters** — generated per job, per company
+- **Automated follow-ups** — scheduled emails every 2 days
+- **Duplicate prevention** — never applies to the same job twice
+- **Full observability** — SQLite tracks jobs, applications, and follow-ups
+- **Dry-run mode** — preview everything before going live
+
+---
+
+## Getting Started
+
+### 1. Install
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/job-automation.git
 cd job-automation
-./setup.sh   # Creates venv, installs deps, installs Playwright
+./setup.sh
 ```
 
-### 2. Configure Environment
+### 2. Configure
 
 ```bash
 cp .env.example .env
-# Edit .env and add your keys:
-#   GEMINI_API_KEY=your_key_here
-#   GMAIL_APP_PASSWORD=your_app_password  (optional, for follow-ups)
+# Add your GEMINI_API_KEY (and optionally GMAIL_APP_PASSWORD)
 ```
 
-### 3. Add Your Resume
+Edit `resume_data.json` with your skills, experience, and job preferences.  
+Edit `config.yaml` to set target roles, locations, and matching thresholds.
 
-Edit `resume_data.json` with your actual info — skills, experience, education, and job preferences. This is what the AI uses to match and score jobs.
-
-### 4. Customize Search
-
-Edit `config.yaml` to set your target roles, locations, and platforms:
-
-```yaml
-search:
-  keywords: ["software engineer", "backend developer"]
-  locations: ["Remote", "New York"]
-
-matching:
-  threshold: 70  # Only consider jobs with 70%+ match
-
-application:
-  mode: "both"   # auto for 85%+, review queue for 70-84%
-```
-
-### 5. Run It
+### 3. Run
 
 ```bash
-# Safe first run — dry mode, no actual applications
+# Safe first run — no applications sent
 python main.py run-all --limit 5 --dry-run
 
-# When ready, go live
+# Go live when ready
 python main.py run-all --limit 20
 ```
 
 ---
 
-## 🛠 CLI Reference
+## CLI Reference
 
-```bash
-python main.py scrape      # Scrape new job listings
-python main.py match       # AI-match scraped jobs with your resume
-python main.py review      # View jobs in your review queue
-python main.py apply       # Submit applications
-python main.py followup    # Send scheduled follow-up emails
-python main.py stats       # View overall statistics
+| Command | Description |
+|---|---|
+| `scrape` | Scrape new job listings from configured platforms |
+| `match` | Score scraped jobs against your resume using AI |
+| `review` | View jobs in your approval queue (70–84% match) |
+| `apply` | Submit applications |
+| `followup` | Send scheduled follow-up emails |
+| `stats` | View application statistics |
+| `run-all` | Run the full pipeline end-to-end |
 
-# Common flags
-  --limit N       Max items to process
-  --dry-run       Preview without submitting/sending
-  --mode auto     Force auto-apply mode
-```
+**Common flags:** `--limit N` · `--dry-run` · `--mode auto`
 
 ---
 
-## 🗂 Project Structure
+## How Matching Works
+
+Every job is sent to Gemini with your resume. It returns a **match score**, a **rationale**, and any **skill gaps**.
+
+| Score | Action |
+|---|---|
+| ≥ 85% | Auto-apply |
+| 70–84% | Added to review queue |
+| < 70% | Skipped |
+
+---
+
+## Project Structure
 
 ```
 job-automation/
-├── main.py                   # CLI entrypoint & orchestrator
-├── config.yaml               # All configuration in one place
-├── resume_data.json          # Your structured resume data
-├── setup.sh                  # One-command setup script
+├── main.py                  # CLI & orchestrator
+├── config.yaml              # Configuration
+├── resume_data.json         # Your resume (structured)
 │
 ├── scrapers/
-│   ├── base_scraper.py       # Shared scraping utilities
-│   ├── linkedin_scraper.py   # LinkedIn (Playwright-based)
-│   └── indeed_scraper.py     # Indeed (BeautifulSoup-based)
+│   ├── base_scraper.py
+│   ├── linkedin_scraper.py  # Playwright-based
+│   └── indeed_scraper.py    # BeautifulSoup-based
 │
 ├── matcher/
-│   ├── resume_parser.py      # Parses PDF / DOCX / TXT / JSON
-│   └── job_matcher.py        # AI scoring & routing logic
+│   ├── resume_parser.py     # PDF / DOCX / TXT / JSON
+│   └── job_matcher.py       # AI scoring & routing
 │
 ├── applicator/
-│   └── base_applicator.py    # Application submission engine
+│   └── base_applicator.py  # Application engine
 │
 ├── followup/
-│   ├── email_manager.py      # Gmail / SMTP integration
-│   └── scheduler.py          # Follow-up timing & dispatch
+│   ├── email_manager.py     # Gmail / SMTP
+│   └── scheduler.py        # Scheduling & dispatch
 │
 └── utils/
-    ├── database.py            # SQLite schema & queries
-    ├── ai_helper.py           # Gemini API wrapper
-    └── logger.py              # Coloured console + file logging
+    ├── database.py          # SQLite schema & ops
+    ├── ai_helper.py         # Gemini API wrapper
+    └── logger.py            # Logging
 ```
 
 ---
 
-## 🧠 How the AI Matching Works
+## Extending
 
-Each scraped job is sent to **Google Gemini** along with your resume data. Gemini returns:
+**Add a new platform** — create a scraper in `scrapers/` inheriting `BaseScraper`, implement `search_jobs()` and `get_job_details()`, then add the platform name to `config.yaml`.
 
-- **Match score** (0–100%)
-- **Rationale** for the score
-- **Missing skills** — so you know what to highlight
+**Adjust matching** — edit thresholds and prompts in `matcher/job_matcher.py` and `utils/ai_helper.py`.
 
-Jobs are then routed:
-
-```
-≥ 85%  →  Auto-apply queue
-70–84% →  Review queue (your approval needed)
-< 70%  →  Skipped
-```
+**Custom follow-up templates** — update prompts in `followup/scheduler.py`.
 
 ---
 
-## 🔒 Safety First
+## Prerequisites
 
-Before going live, always:
-
-```bash
-# 1. Run dry-run to preview everything
-python main.py run-all --limit 3 --dry-run
-
-# 2. Check match quality
-python main.py review
-
-# 3. Inspect generated cover letters in the logs
-tail -f logs/job_automation.log
-
-# 4. Start small on first real run
-python main.py apply --limit 1
-```
+| Requirement | Notes |
+|---|---|
+| Python 3.8+ | |
+| Gemini API key | [Get one free](https://aistudio.google.com/app/apikey) |
+| Gmail App Password | Optional — only for follow-up emails |
 
 ---
 
-## 🔧 Extending the System
+## Notes
 
-### Add a New Job Platform
-
-```python
-# scrapers/glassdoor_scraper.py
-from scrapers.base_scraper import BaseScraper
-
-class GlassdoorScraper(BaseScraper):
-    def get_platform_name(self): return "glassdoor"
-    def search_jobs(self, keywords, locations, **kwargs): ...
-    def get_job_details(self, url): ...
-```
-
-Then add `"glassdoor"` to `platforms.enabled` in `config.yaml`.
+- LinkedIn scraping requires a one-time manual login; the session is saved afterward
+- Application submission defaults to dry-run mode — browser automation must be explicitly enabled
+- Always use `--dry-run` before your first live run
+- Respect each platform's Terms of Service
 
 ---
 
-## 📋 Prerequisites
+## License
 
-- Python 3.8+
-- A [Google Gemini API key](https://aistudio.google.com/app/apikey) (free tier works)
-- A Gmail App Password *(optional — only needed for follow-up emails)*
-
----
-
-## ⚠️ Current Limitations
-
-- Application **submission** runs in demonstration/dry-run mode by default (production browser automation can be enabled)
-- LinkedIn scraping requires a **one-time manual login** — session is saved after that
-- Always respect each platform's Terms of Service
-
----
-
-## 📄 License
-
-MIT — use freely, contribute back if you improve it.
-
----
-
-<p align="center">
-  Built with 🤖 Google Gemini · 🎭 Playwright · 🐍 Python
-</p>
+MIT
